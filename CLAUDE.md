@@ -36,10 +36,28 @@ self-contained, parametric module intended to be pulled into a design with
   bracing (an X per cell). Lightens a solid wall while keeping stiffness through
   triangulation. Provides `strut()`, `skeletonized_wall_2d()`, and
   `skeletonized_wall()`.
-- `gridfinity_baseplate.scad` — a `cols` × `rows` Gridfinity baseplate with
-  optional magnet holes (`magnets = true`). Gridfinity spec constants (42 mm
-  pitch, 4.75 mm stacking profile, 26 mm magnet pitch) are named at the top of
-  the file. Provides `gridfinity_baseplate()`.
+- `gridfinity_baseplate.scad` — a `cols` × `rows` Gridfinity baseplate: each
+  cell gets a raised alignment rim, with optional magnet holes (`magnets =
+  true`, sized via the `magnet_dims()` table by name, e.g. `"6x2"`), optional
+  padding arms (`pad_left`/`pad_right`/`pad_top`/`pad_bottom`) to fill leftover
+  drawer space, and optional `key_*` butterfly-key pockets (see
+  `gridfinity_frame_connectors.scad`) to join multiple printed plates.
+  Provides `gridfinity_baseplate()`.
+- `gridfinity_bin_bottom.scad` — the underside of a Gridfinity bin: a `cols` ×
+  `rows` floor with a male stacking foot per cell (mates with a baseplate or
+  stacks on another bin), optional magnet holes, and optional skeletonization
+  of the floor. Gridfinity spec constants (42 mm pitch, 4.75 mm stacking
+  profile, 26 mm magnet pitch) are named at the top of the file. Provides
+  `gridfinity_bin_bottom()`.
+- `gridfinity_frame_connectors.scad` — a loose bowtie ("butterfly key")
+  connector for joining separately printed baseplates: a key-shaped pocket is
+  cut into each plate straddling the seam, and a separately printed key drops
+  in to lock them together. Provides `gridfinity_key()`, `gridfinity_key_2d()`,
+  `gridfinity_key_socket_2d()`. **Attribution:** the bowtie profile is adapted
+  from `ButterFlyConnector()` in ostat's `gridfinity_extended_openscad`
+  (GPL-3.0, https://github.com/ostat/gridfinity_extended_openscad),
+  reimplemented standalone here — see the file header and README.md's
+  Attribution section before modifying this file's core geometry.
 - `screw_mounts.scad` — negative-geometry cutters for metric fasteners
   (M2–M8), meant to be `difference()`-d out of a part: `insert_hole()`
   (heat-set insert bore), `screw_hole()` (clearance hole with a selectable head

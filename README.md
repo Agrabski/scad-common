@@ -13,7 +13,9 @@ it) renders a small demo so you can preview what it does.
 | File | Provides | What it does |
 |------|----------|--------------|
 | [`skeletonized_wall.scad`](skeletonized_wall.scad) | `skeletonized_wall()`, `skeletonized_wall_2d()`, `strut()` | A grid of rectangular cells with diagonal cross bracing — lightens a solid wall while keeping stiffness through triangulation. |
-| [`gridfinity_baseplate.scad`](gridfinity_baseplate.scad) | `gridfinity_baseplate()` | A Gridfinity baseplate of any `cols` × `rows` size, with optional magnet holes (`magnets = true`). |
+| [`gridfinity_baseplate.scad`](gridfinity_baseplate.scad) | `gridfinity_baseplate()` | A Gridfinity baseplate of any `cols` × `rows` size, with optional magnet holes (`magnets = true`, sized by name via `magnet_size`), optional padding arms to fill leftover drawer space, and optional butterfly-key pockets to join multiple printed plates together. |
+| [`gridfinity_bin_bottom.scad`](gridfinity_bin_bottom.scad) | `gridfinity_bin_bottom()` | The underside of a Gridfinity bin — a `cols` × `rows` floor with a male stacking foot per cell, optional magnet holes, and optional skeletonized floor. |
+| [`gridfinity_frame_connectors.scad`](gridfinity_frame_connectors.scad) | `gridfinity_key()`, `gridfinity_key_2d()`, `gridfinity_key_socket_2d()` | A loose bowtie ("butterfly key") connector: a key-shaped pocket is cut into each plate at the seam (`gridfinity_baseplate()`'s `key_*` parameters) and a separately printed key locks them together. Adapted from ostat's `gridfinity_extended_openscad` — see [Attribution](#attribution). |
 | [`screw_mounts.scad`](screw_mounts.scad) | `insert_hole()`, `screw_hole()`, `clearance_hole()`, `counterbore_hole()` | Negative-geometry cutters for metric fasteners (M2–M8): heat-set insert bores plus screw holes with a selectable head recess (countersunk, socket cap, button, or none). `difference()` them out of a part. |
 
 ## Usage
@@ -25,6 +27,13 @@ use <screw_mounts.scad>
 
 // A 3x2 baseplate with magnet holes.
 gridfinity_baseplate(cols = 3, rows = 2, magnets = true);
+
+// Two plates joined edge to edge with a loose butterfly key, the left one
+// padded to fill an 8 mm gap on its outer edge.
+gridfinity_baseplate(cols = 2, rows = 2, pad_left = 8, key_right = true);
+translate([2 * 42, 0, 0])
+    gridfinity_baseplate(cols = 2, rows = 2, key_left = true);
+translate([2 * 42, 21, 6]) gridfinity_key(); // print this once per connector
 
 // A cross-braced wall panel.
 translate([0, 130, 0])
@@ -60,6 +69,20 @@ openscad -o out.png --imgsize=600,450 --projection=perspective gridfinity_basepl
 ```
 
 All dimensions are in millimeters.
+
+## Attribution
+
+The bowtie/"butterfly key" profile in
+[`gridfinity_frame_connectors.scad`](gridfinity_frame_connectors.scad)
+(`gridfinity_key_2d()` / `gridfinity_key_socket_2d()` / `gridfinity_key()`) is
+adapted from the `ButterFlyConnector()` module in
+[ostat/gridfinity_extended_openscad](https://github.com/ostat/gridfinity_extended_openscad),
+licensed GPL-3.0. It has been reimplemented standalone here — without that
+project's grid/frame coordinate system — to match this repo's conventions,
+under the same license. All credit for the original connector design goes to
+that project's authors; this repo is not affiliated with it.
+
+Every other module in this repo is original.
 
 ## License
 
